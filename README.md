@@ -1,1 +1,2 @@
-# sdc
+# System Design Capstone
+## Project Atelier
