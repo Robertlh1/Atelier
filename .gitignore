@@ -102,3 +102,13 @@ dist
 
 # TernJS port file
 .tern-port
+
+#csv files
+./db/csv/
+
+#login info
+sdc.pem
+sdc.pem:Zone.Identifier
+
+#misc
+./server/script.js
