@@ -1,0 +1,31 @@
+{
+  "name": "sdc",
+  "version": "1.0.0",
+  "description": "Project Atelier",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postgres-start": "sudo su - postgres",
+    "postgres-init": "psql -d postgres -f -a ./db/schema.sql",
+    "postgres": "psql",
+    "express-dev": "nodemon ./server/index.js",
+    "k6-questions": "k6 run --vus 3000 --duration 60s ./db/script.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robertlh1/sdc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Robertlh1/sdc/issues"
+  },
+  "homepage": "https://github.com/Robertlh1/sdc#readme",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "express": "^4.17.3",
+    "newrelic": "^8.8.0",
+    "nodemon": "^2.0.15",
+    "pg": "^8.7.3"
+  }
+}
