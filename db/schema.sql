@@ -14,7 +14,7 @@ helpful INT
 );
 
 COPY questions(id, product_id, body, date_written, asker_name, asker_email, reported, helpful)
-FROM '/sdc/db/csv/questions.csv'
+FROM '/home/ubuntu/sdc/db/csv/questions.csv'
 DELIMITER ','
 HEADER CSV;
 
@@ -35,7 +35,7 @@ CONSTRAINT fk_question
 );
 
 COPY answers(id, question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
-FROM '/sdc/db/csv/answers.csv'
+FROM '/home/ubuntu/sdc/db/csv/answers.csv'
 DELIMITER ','
 HEADER CSV;
 
@@ -51,7 +51,7 @@ CONSTRAINT fk_answer
 );
 
 COPY answers_photos(id, answer_id, url)
-FROM '/sdc/db/csv/answers_photos.csv'
+FROM '/home/ubuntu/sdc/db/csv/answers_photos.csv'
 DELIMITER ','
 HEADER CSV;
 
@@ -70,7 +70,7 @@ CONSTRAINT fk_product
 );
 
 COPY tempquestions(id, product_id, body, date_written, asker_name, asker_email, reported, helpful)
-FROM '/sdc/db/csv/questions.csv'
+FROM '/home/ubuntu/sdc/db/csv/questions.csv'
 DELIMITER ','
 HEADER CSV;
 
@@ -102,7 +102,7 @@ CONSTRAINT fk_question
 );
 
 COPY tempanswers(id, question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
-FROM '/sdc/db/csv/answers.csv'
+FROM '/home/ubuntu/sdc/db/csv/answers.csv'
 DELIMITER ','
 HEADER CSV;
 
