@@ -73,21 +73,6 @@ app.put('/api/fec2/hr-den/qa/answers/*/helpful', async (req, res) => {
 ========== GET Requests ==========
 */
 
-// Route to get all products
-app.get('/api/fec2/hr-den/products', async (req, res) => {
-  const params = url.parse(req.url, true).query
-  params.count = params.count || 5
-  params.page = params.page - 1|| 0
-
-  let query
-  params.product_id ?
-  query = await db.pool.query(`SELECT * FROM products WHERE id = ${params.product_id}`) :
-  query = await db.pool.query(`SELECT * FROM products LIMIT ${params.count} OFFSET ${params.count * params.page}`);
-
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(query.rows))
-})
-
 // Route to get all answers from a question, needs question_id
 app.get('/api/fec2/hr-den/qa/questions/*/answers', async (req, res) => {
   const question_id = url.parse(req.url, false).pathname.replace('/api/fec2/hr-den/qa/questions/', '').replace('/answers', '')

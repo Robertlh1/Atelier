@@ -1,16 +1,6 @@
-DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS questions CASCADE;
 DROP TABLE IF EXISTS answers CASCADE;
 DROP TABLE IF EXISTS answers_photos CASCADE;
-
-CREATE TABLE products(
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(50),
-  slogan VARCHAR(150),
-  description VARCHAR(500),
-  category VARCHAR(50),
-  default_price INT,
-);
 
 CREATE TABLE questions(
 id SERIAL PRIMARY KEY,
@@ -20,14 +10,11 @@ date_written VARCHAR(24),
 asker_name VARCHAR(60),
 asker_email VARCHAR(60),
 reported BOOLEAN,
-helpful INT,
-CONSTRAINT fk_product
-  FOREIGN KEY(product_id)
-    REFERENCES products(id)
+helpful INT
 );
 
 COPY questions(id, product_id, body, date_written, asker_name, asker_email, reported, helpful)
-FROM 'questions.csv'
+FROM '/sdc/db/csv/questions.csv'
 DELIMITER ','
 HEADER CSV;
 
@@ -48,7 +35,7 @@ CONSTRAINT fk_question
 );
 
 COPY answers(id, question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
-FROM 'answers.csv'
+FROM '/sdc/db/csv/answers.csv'
 DELIMITER ','
 HEADER CSV;
 
@@ -64,7 +51,7 @@ CONSTRAINT fk_answer
 );
 
 COPY answers_photos(id, answer_id, url)
-FROM 'answers_photos.csv'
+FROM '/sdc/db/csv/answers_photos.csv'
 DELIMITER ','
 HEADER CSV;
 
@@ -83,7 +70,7 @@ CONSTRAINT fk_product
 );
 
 COPY tempquestions(id, product_id, body, date_written, asker_name, asker_email, reported, helpful)
-FROM 'questions.csv'
+FROM '/sdc/db/csv/questions.csv'
 DELIMITER ','
 HEADER CSV;
 
@@ -115,7 +102,7 @@ CONSTRAINT fk_question
 );
 
 COPY tempanswers(id, question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
-FROM 'answers.csv'
+FROM '/sdc/db/csv/answers.csv'
 DELIMITER ','
 HEADER CSV;
 
