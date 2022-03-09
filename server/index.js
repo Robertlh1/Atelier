@@ -21,9 +21,13 @@ app.post('/api/fec2/hr-den/qa/questions', async (req, res) => {
 
   db.pool.query(`INSERT INTO questions(product_id, body, date_written, asker_name, asker_email, reported, helpful)
   VALUES('${params.product_id}', '${req.body.body}', '${util.inspect(new Date())}', '${req.body.asker_name}',
-  '${req.body.asker_email}', 'false', '0')`)
-
-  res.send()
+  '${req.body.asker_email}', 'false', '0')`, (err, result) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send()
+    }
+  })
 });
 
 // Route to post a new answer
@@ -34,14 +38,22 @@ app.post('/api/fec2/hr-den/qa/questions/*/answers', async (req, res) => {
   INSERT INTO answers(question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
   VALUES('${question_id}', '${req.body.body}', '${util.inspect(new Date())}', '${req.body.answerer_name}',
   '${req.body.answerer_email}', 'false', '0')
-  RETURNING id`)
+  RETURNING id`, (err, result) => {
+    if (err) {
+      res.send(err)
+    }
+  })
 
   for (var i = 0; i < req.body.photos.length; i++) {
     await db.pool.query(`INSERT INTO answers_photos(answer_id, url)
-    VALUES('${id.rows[0].id}', '${req.body.photos[i]}')`)
+    VALUES('${id.rows[0].id}', '${req.body.photos[i]}')`, (err, result) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.send()
+      }
+    })
   }
-
-  res.send()
 });
 
 /*
@@ -51,22 +63,37 @@ app.post('/api/fec2/hr-den/qa/questions/*/answers', async (req, res) => {
 // Route to report a question, needs question_id
 app.put('/api/fec2/hr-den/qa/questions/*/report', async (req, res) => {
   const question_id = req.url.replace('/api/fec2/hr-den/qa/questions/', '').replace('/report', '')
-  await db.pool.query(`UPDATE questions SET reported = true WHERE id = ${question_id}`)
-  res.send()
+  await db.pool.query(`UPDATE questions SET reported = true WHERE id = ${question_id}`, (err, result) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send()
+    }
+  })
 })
 
 // Route to report an answer, needs answer_id
 app.put('/api/fec2/hr-den/qa/answers/*/report', async (req, res) => {
   const answer_id = req.url.replace('/api/fec2/hr-den/qa/answers/', '').replace('/report', '')
-  await db.pool.query(`UPDATE answers SET reported = true WHERE id = ${answer_id}`)
-  res.send()
+  await db.pool.query(`UPDATE answers SET reported = true WHERE id = ${answer_id}`, (err, result) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send()
+    }
+  })
 })
 
 // Route to increment an answers helpfulness, needs answer_id
 app.put('/api/fec2/hr-den/qa/answers/*/helpful', async (req, res) => {
   const answer_id = req.url.replace('/api/fec2/hr-den/qa/answers/', '').replace('/helpful', '')
-  await db.pool.query(`UPDATE answers SET helpful = helpful + 1 WHERE id = ${answer_id}`)
-  res.send()
+  await db.pool.query(`UPDATE answers SET helpful = helpful + 1 WHERE id = ${answer_id}`, (err, result) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send()
+    }
+  })
 })
 
 /*
@@ -95,11 +122,15 @@ app.get('/api/fec2/hr-den/qa/questions/*/answers', async (req, res) => {
   WHERE question_id = ${question_id} AND answers.reported = false
   GROUP BY answers.id
   ORDER BY helpful
-  LIMIT ${params.count}`)
-
-  const returnObj = {question: question_id, page: params.page, count: params.count, results: query.rows}
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(returnObj))
+  LIMIT ${params.count}`, (err, result) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      const returnObj = {question: question_id, page: params.page, count: params.count, results: query.rows}
+      res.send(returnObj)
+    }
+  })
 })
 
 // Route to get all questions from a product, needs product_id
@@ -108,7 +139,7 @@ app.get('/api/fec2/hr-den/qa/questions*', async (req, res) => {
   params.count = params.count || 5
   params.page = params.page - 1 || 0
 
-  const query = await db.pool.query(`
+  await db.pool.query(`
   SELECT
   q.id,
   q.body,
@@ -133,9 +164,16 @@ app.get('/api/fec2/hr-den/qa/questions*', async (req, res) => {
   ) as answers
 
   FROM questions as q
-  WHERE q.product_id = 5`)
-
-  const returnObj = {product_id: params.product_id, results: query.rows}
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(returnObj))
+  WHERE q.product_id = ${params.product_id}
+  ORDER BY q.helpful desc
+  LIMIT ${params.count}
+  OFFSET ${params.count * params.page}`, (err, result) => {
+    const returnObj = {product_id: params.product_id, results: result.rows}
+    if (err) {
+      res.send()
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(returnObj)
+    }
+  })
 })
