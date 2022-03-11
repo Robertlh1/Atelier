@@ -96,7 +96,7 @@ app.put('/api/fec2/hr-den/qa/answers/*/helpful', async (req, res) => {
 ========== GET Requests ==========
 */
 
-app.get('loaderio-cfd58601a6a1f2b80abfcc7b3593471e.txt', async (req, res) => {
+app.get('/loaderio-cfd58601a6a1f2b80abfcc7b3593471e.txt', async (req, res) => {
   res.send('loaderio-cfd58601a6a1f2b80abfcc7b3593471e')
 })
 
