@@ -38,11 +38,7 @@ app.post('/api/fec2/hr-den/qa/questions/*/answers', async (req, res) => {
   INSERT INTO answers(question_id, body, date_written, answerer_name, answerer_email, reported, helpful)
   VALUES('${question_id}', '${req.body.body}', '${util.inspect(new Date())}', '${req.body.answerer_name}',
   '${req.body.answerer_email}', 'false', '0')
-  RETURNING id`, (err, result) => {
-    if (err) {
-      res.send(err)
-    }
-  })
+  RETURNING id`)
 
   for (var i = 0; i < req.body.photos.length; i++) {
     await db.pool.query(`INSERT INTO answers_photos(answer_id, url)
@@ -99,6 +95,10 @@ app.put('/api/fec2/hr-den/qa/answers/*/helpful', async (req, res) => {
 /*
 ========== GET Requests ==========
 */
+
+app.get('loaderio-cfd58601a6a1f2b80abfcc7b3593471e.txt', async (req, res) => {
+  res.send('loaderio-cfd58601a6a1f2b80abfcc7b3593471e')
+})
 
 // Route to get all answers from a question, needs question_id
 app.get('/api/fec2/hr-den/qa/questions/*/answers', async (req, res) => {
