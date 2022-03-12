@@ -96,8 +96,8 @@ app.put('/api/fec2/hr-den/qa/answers/*/helpful', async (req, res) => {
 ========== GET Requests ==========
 */
 
-app.get('/loaderio-cfd58601a6a1f2b80abfcc7b3593471e.txt', async (req, res) => {
-  res.send('loaderio-cfd58601a6a1f2b80abfcc7b3593471e')
+app.get('/loaderio-8e50c51dc3e82b45629db7720d01fd44.txt', async (req, res) => {
+  res.send('loaderio-8e50c51dc3e82b45629db7720d01fd44')
 })
 
 // Route to get all answers from a question, needs question_id
@@ -164,10 +164,9 @@ app.get('/api/fec2/hr-den/qa/questions*', async (req, res) => {
   ) as answers
 
   FROM questions as q
-  WHERE q.product_id = ${params.product_id}
+  WHERE q.product_id = 5
   ORDER BY q.helpful desc
-  LIMIT ${params.count}
-  OFFSET ${params.count * params.page}`, (err, result) => {
+`, (err, result) => {
     const returnObj = {product_id: params.product_id, results: result.rows}
     if (err) {
       res.send()
