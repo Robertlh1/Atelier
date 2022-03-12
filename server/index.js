@@ -164,9 +164,10 @@ app.get('/api/fec2/hr-den/qa/questions*', async (req, res) => {
   ) as answers
 
   FROM questions as q
-  WHERE q.product_id = 5
+  WHERE q.product_id = ${params.product_id}
   ORDER BY q.helpful desc
-`, (err, result) => {
+  LIMIT ${params.count}
+  OFFSET ${params.count * params.page}`, (err, result) => {
     const returnObj = {product_id: params.product_id, results: result.rows}
     if (err) {
       res.send()
